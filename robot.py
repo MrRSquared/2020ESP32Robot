@@ -12,12 +12,16 @@ while True:
 ESP32 motor code from http://mpy-tut.zoic.org/tut/motors.html
     '''
 import time
-from machine import Pin
+import machine
 
-pin_motor = Pin(4, machine.Pin.OUT)
-pwm_motor = PWM(pin_motor)
-pwm.freq(51) # 51 (51/1023 * 20ms = 1ms) Full Reverse
-time.sleep(5)
-pwm.freq(102) # 102 (102/1023 * 20ms = 2ms) Full forward
-time.sleep(5)
-pwm.freq(76)# Stop (Maybe?)
+pin_motor = machine.Pin(14)
+pwm_motor = machine.PWM(pin_motor,freq=50)
+while True:
+  pwm_motor.duty(51) # 51 (51/1023 * 20ms = 1ms) Full Reverse
+  time.sleep(5)
+  pwm_motor.duty(102) # 102 (102/1023 * 20ms = 2ms) Full forward
+  time.sleep(5)
+  pwm_motor.duty(76)# Stop (Maybe?)
+  print("Hi")
+
+
