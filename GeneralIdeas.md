@@ -6,8 +6,8 @@ We have a few microcontrollers that could allow students to create cardboard rob
             http://micropython.org/webrepl
             Arduino capability for students wanting to learn CPP.
         Downsides...
-            3.3v logic level means we need to use our own hbridge motor controllers.
-                Also, it is possible that some devices will need level shifting as well.
+                It is small as far as memory goes.
+                Also, it is possible that some devices will need level shifting (its logic level is 3.3v).
             No accelerometer.
     2) Pyboard
         This is an incredibly flexible board. Some noteable highlights...
@@ -17,4 +17,5 @@ We have a few microcontrollers that could allow students to create cardboard rob
         Downsides
             No Wifi (not insurmountable)
             Need to research how to best control power
-            
+This could be a good general IDE for them...
+https://codeanywhere.com/

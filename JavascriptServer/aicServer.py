@@ -5,6 +5,11 @@ try:
   import usocket as socket
 except:
   import socket
+from time import sleep
+from machine import Pin, PWM
+frequency = 5000
+
+led=PWM(Pin(2), frequency)
 
 def AiCWebserv():
     # minimal Ajax in Control Webserver
@@ -26,6 +31,8 @@ def AiCWebserv():
             ie = request.find(' ', ib)
             Val = request[ib+4:ie]
             print("Val =", Val)
+            duty_cycle = int(Val)
+            led.duty(duty_cycle)
             conn.send(Val)
         else:
             with open('aicWebpage.html', 'r') as html:

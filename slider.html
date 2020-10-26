@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Range Slider Picture</h1>
+
+<div class="slidecontainer">
+  <input type="range" step =".01"min="-1" max="1" value="0" class="slider" id="myRange">
+  <p>Value: <span id="demo"></span></p>
+</div>
+
+<script>
+  //This comes from these tutorials... 
+  //https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API
+  //https://beej.us/blog/data/javascript-gamepad///setup variables
+  var slider = document.getElementById("myRange");
+  var output = document.getElementById("demo");
+
+  output.innerHTML = slider.value;
+
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+
+  //attempt at implementing GamePad
+  var haveEvents = 'ongamepadconnected' in window;
+  var controllers = {};
+
+  function connecthandler(e) {
+    addgamepad(e.gamepad);
+  }
+
+  function addgamepad(gamepad) {
+    controllers[gamepad.index] = gamepad;
+
+
+    var d = document.createElement("div");
+    d.setAttribute("id", "controller" + gamepad.index);
+    requestAnimationFrame(updateStatus);
+  }
+
+  function disconnecthandler(e) {
+    removegamepad(e.gamepad);
+  }
+
+  function removegamepad(gamepad) {
+
+    delete controllers[gamepad.index];
+  }
+
+  function updateStatus() {
+    if (!haveEvents) {
+      scangamepads();
+    }
+
+    var i = 0;
+    var j;
+
+    for (j in controllers) {
+      var controller = controllers[j];
+      var d = document.getElementById("controller" + j);
+      
+    }
+
+    
+      //update the slider
+    let driveController= document.getElementById(controller);
+    output.innerHTML = (-controller.axes[1].toFixed(2));
+    slider.value = -controller.axes[1];
+    function buttonPressed(b) {
+      if (typeof(b) == "object") {
+        return b.pressed;
+      }
+      return b == 1.0;
+      }
+    if (buttonPressed(controller.buttons[5])){
+      console.log("button pressed");
+    }
+    requestAnimationFrame(updateStatus);
+  }
+
+  function scangamepads() {
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+    for (var i = 0; i < gamepads.length; i++) {
+      if (gamepads[i]) {
+        if (gamepads[i].index in controllers) {
+          controllers[gamepads[i].index] = gamepads[i];
+        } else {
+          addgamepad(gamepads[i]);
+        }
+      }
+    }
+  }
+
+  window.addEventListener("gamepadconnected", connecthandler);
+  window.addEventListener("gamepaddisconnected", disconnecthandler);
+
+  if (!haveEvents) {
+  setInterval(scangamepads, 500);
+  }
+</script>
+
+</body>
+</html>
