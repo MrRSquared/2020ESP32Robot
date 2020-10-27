@@ -1,0 +1,141 @@
+
+<html> 
+	<head> 
+		<title>AiCWeb</title> 
+		<link rel="icon" href="data:;base64,=">
+		<style type="text/css" id="style">
+			.dimwrap { border: 2px solid red; height: 210px; width: 70px;}
+			.dimSlide { transform: scaleX(2) rotate(270deg); position: relative; top: 80px; left: -32px;}
+			.dimVal { width: 45px; position: relative; top: 20px; left: 12px}
+		</style>
+		<script language="javascript"> 
+
+
+
+      function dimSet(evt) {
+        var me, he;
+          var resp, xmlhttp=new XMLHttpRequest();   
+        me = evt.target;
+        he = document.getElementById(me.id == "dimVal"? "dimSlide":"dimVal"); // need my other value node
+          xmlhttp.onreadystatechange=function() {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            resp = xmlhttp.responseText;
+            console.log(resp);
+            he.value = parseInt(resp);
+          }
+        }
+          xmlhttp.open("GET","Val=" + me.value,true); xmlhttp.send()	
+      } 
+      </script> 
+      </head>
+    <body>
+    
+    <h1>Range Slider Picture</h1>
+    
+    <div class="slidecontainer">
+      <input type="range" step =".01"min="-1" max="1" value="0" class="slider" id="myRange">
+      <p>Value: <span id="demo"></span></p>
+    </div>
+    <h1>Ajax in Control WebPage</h1>
+		<div class="dimwrap" id="dimwrap">
+		<input class="dimVal" type="number" id="dimVal" min="-1" max="1" step=".01" value="0" onclick="dimSet(event)" oninput="dimSet(event)" > 
+		<input class= "dimSlide" type="range" id="dimSlide" min="-1" max="1" step=",01" value="0" onclick="dimSet(event)" oninput="dimSet(event)" >
+		</div>
+    
+    <script>
+      //This comes from these tutorials... 
+      //https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API
+      //https://beej.us/blog/data/javascript-gamepad///setup variables
+      var slider = document.getElementById("myRange");
+      var output = document.getElementById("demo");
+      var slider2 = document.getElementById("dimVal");
+    
+      output.innerHTML = slider.value;
+      output.innerHTML = slider2.value;
+    
+      slider.oninput = function() {
+        output.innerHTML = this.value;
+      }
+    
+      //attempt at implementing GamePad
+      var haveEvents = 'ongamepadconnected' in window;
+      var controllers = {};
+    
+      function connecthandler(e) {
+        addgamepad(e.gamepad);
+      }
+    
+      function addgamepad(gamepad) {
+        controllers[gamepad.index] = gamepad;
+    
+    
+        var d = document.createElement("div");
+        d.setAttribute("id", "controller" + gamepad.index);
+        requestAnimationFrame(updateStatus);
+      }
+    
+      function disconnecthandler(e) {
+        removegamepad(e.gamepad);
+      }
+    
+      function removegamepad(gamepad) {
+    
+        delete controllers[gamepad.index];
+      }
+    
+      function updateStatus() {
+        if (!haveEvents) {
+          scangamepads();
+        }
+    
+        var i = 0;
+        var j;
+    
+        for (j in controllers) {
+          var controller = controllers[j];
+          var d = document.getElementById("controller" + j);
+          
+        }
+    
+        
+          //update the slider
+        let driveController= document.getElementById(controller);
+        output.innerHTML = (-controller.axes[1].toFixed(2));
+        slider.value = -controller.axes[1];
+        slider2.value = -controller.axes[1];
+        function buttonPressed(b) {
+          if (typeof(b) == "object") {
+            return b.pressed;
+          }
+          return b == 1.0;
+          }
+        if (buttonPressed(controller.buttons[5])){
+          console.log("button pressed");
+        }
+        requestAnimationFrame(updateStatus);
+      }
+    
+      function scangamepads() {
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+        for (var i = 0; i < gamepads.length; i++) {
+          if (gamepads[i]) {
+            if (gamepads[i].index in controllers) {
+              controllers[gamepads[i].index] = gamepads[i];
+            } else {
+              addgamepad(gamepads[i]);
+            }
+          }
+        }
+      }
+    
+      window.addEventListener("gamepadconnected", connecthandler);
+      window.addEventListener("gamepaddisconnected", disconnecthandler);
+    
+      if (!haveEvents) {
+      setInterval(scangamepads, 500);
+      }
+
+		</script> 
+	 </body>
+
+</html>
